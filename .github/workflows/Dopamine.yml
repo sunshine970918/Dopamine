@@ -93,14 +93,3 @@ jobs:
 
           cat ./commit_logs.txt >> ./release.md
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.ctime }}
-          name: "Dopamine: ${{ env.shorthash }}_${{ env.ctime }}"
-          body_path: ./release.md
-          draft: false
-          prerelease: false
-          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          files: |
-           *.ipa
