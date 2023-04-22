@@ -22,6 +22,9 @@ struct SettingsView: View {
     @State var rootPasswordChangeAlertShown = false
     @State var rootPasswordInput = "alpine"
 
+    @State var pathMappingAlertShown = false
+    @State var pathMappingInput = ""
+
     @State var removeJailbreakAlertShown = false
     @State var tweakInjectionToggledAlertShown = false
 
@@ -59,6 +62,24 @@ struct SettingsView: View {
                 }
                 if isBootstrapped() {
                     VStack {
+                        if isJailbroken() && isPathMappingEnabled() {
+                            Button(action: {
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                pathMappingAlertShown = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "mappin.and.ellipse")
+                                    Text("Button_Add_Path_Mapping_Source")
+                                        .lineLimit(1)
+                                }
+                                .padding(8)
+                                .frame(maxWidth: .infinity)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.white.opacity(0.25), lineWidth: 0.5)
+                                )
+                            }
+                        }
                         if isJailbroken() {
                             Button(action: {
                                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -142,6 +163,12 @@ struct SettingsView: View {
             ZStack {}
                 .textFieldAlert(isPresented: $rootPasswordChangeAlertShown) { () -> TextFieldAlert in
                     TextFieldAlert(title: NSLocalizedString("Popup_Change_Root_Password_Title", comment: ""), message: "", text: Binding<String?>($rootPasswordInput))
+                }
+                .textFieldAlert(isPresented: $pathMappingAlertShown) { () -> TextFieldAlert in
+                    TextFieldAlert(title: NSLocalizedString("Popup_Path_Mapping_Source_Title", comment: ""),
+                                 message: "",
+                                    text: Binding<String?>($pathMappingInput)
+                    )
                 }
                 .alert("Settings_Remove_Jailbreak_Alert_Title", isPresented: $removeJailbreakAlertShown, actions: {
                     Button("Button_Cancel", role: .cancel) { }

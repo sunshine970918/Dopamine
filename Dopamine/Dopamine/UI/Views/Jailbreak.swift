@@ -81,9 +81,18 @@ func doReboot() {
     })
 }
 
+func isPathMappingEnabled() -> Bool {
+    let dpDefaults = dopamineDefaults()
+    let enableMount = dpDefaults.bool(forKey: "enableMount")
+    let isMappingPlistExists = FileManager.default.fileExists(
+        atPath: "/var/mobile/Library/Preferences/page.liam.prefixers.plist")
+
+    return enableMount && isMappingPlistExists;
+}
+
 func isJailbroken() -> Bool {
     //if isSandboxed() { return true } // ui debugging
-    
+
     var jbdPid: pid_t = 0
     jbdGetStatus(nil, nil, &jbdPid)
     return jbdPid != 0
@@ -91,7 +100,7 @@ func isJailbroken() -> Bool {
 
 func isBootstrapped() -> Bool {
     //if isSandboxed() { return true } // ui debugging
-    
+
     return Bootstrapper.isBootstrapped()
 }
 
